@@ -1,0 +1,97 @@
+﻿table.multiColumn
+{
+	font-family: Arial;
+	font-size: 12px;
+	color: #333333;
+	border-width: 1px;
+	border-color: #999999;
+	border-collapse: collapse;
+	z-index: 20000;
+	white-space: nowrap;
+}
+
+	table.multiColumn th
+	{
+		/*background: #b5cfd2;*/
+		border: 1px;
+		padding: 2px;
+		border-style: solid;
+		border-color: #999999;
+		z-index: 20001;
+	}
+
+	table.multiColumn td
+	{
+		color: #000000;
+		padding: 2px;
+		/*background-color: #C0F3FA; Cell background Color */
+		vertical-align: middle;
+		border: 1px solid #7C7D7D;
+		z-index: 20002;
+		white-space: nowrap;
+	}
+
+	/*table.multiColumn tr.odd
+	{
+		background-color: #F5FAFA;
+		border: 1px solid #7C7D7D;
+		padding: 2px;
+		z-index: 20002;
+	}
+
+	table.multiColumn tr.even
+	{
+		background-color: #ffffff;
+		border: 1px solid #7C7D7D;
+		padding: 2px;
+		z-index: 20002;
+	}*/
+
+	table.multiColumn tr:hover td
+	{
+		background: #0055aa;
+		border-color: #BCDEF7;
+		color: #fff;
+	}
+
+	table.multiColumn tr.selected td
+	{
+		background: #7d7d7d;
+		border-color: #bcdef7;
+		color: #fff;
+	}
+
+.divStyle input[type="text"]
+{
+	border: 1px solid #a9adb0;
+}
+
+/*.divStyle
+{
+background-image:url(Images\bg.png)
+}*/
+
+/*div.MultiStatic
+{
+	width: 550px;
+	padding: 2px;
+	border: 1px solid gray;
+	margin: 0px;
+	position: absolute;
+	height: 145px;
+	overflow: auto;
+	z-index: 2000;
+	margin-left: 0px;
+}
+
+div.SingleStatic
+{
+	width: 200px;
+	padding: 2px;
+	border: 1px solid gray;
+	margin: 0px;
+	position: absolute;
+	overflow: auto;
+	z-index: 2000;
+	margin-left: 0px;
+}*/
