@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OmniCombo — High-Performance Multi-Column Combobox</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --success: #16a34a;
+      --success-bg: #dcfce7;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 32px 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 28px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Benchmark Alert */
+    .benchmark-card {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .benchmark-text {
+      font-size: 14px;
+      color: #1e40af;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .badge.success {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .btn {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .btn:hover { background: var(--primary-dark); }
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #334155;
+    }
+    .btn-secondary:hover { background: #cbd5e1; }
+
+    /* Demos Grid */
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card h2 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      min-height: 38px;
+    }
+
+    .combo-wrapper {
+      margin-top: auto;
+      padding-top: 8px;
+    }
+
+    /* Shortcuts Reference Table */
+    .shortcuts-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+
+    .shortcuts-section h2 {
+      font-size: 18px;
+      margin-bottom: 14px;
+    }
+
+    .shortcuts-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .shortcuts-table th, .shortcuts-table td {
+      padding: 8px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .shortcuts-table th {
+      background: #f8fafc;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    kbd {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 3px;
+      padding: 2px 6px;
+      font-family: monospace;
+      font-size: 12px;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    /* Event Logger */
+    .logger-section {
+      background: #0f172a;
+      border-radius: 8px;
+      color: #f8fafc;
+      padding: 20px;
+      margin-bottom: 32px;
+    }
+
+    .logger-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .logger-header h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #94a3b8;
+    }
+
+    .log-box {
+      font-family: Consolas, monospace;
+      font-size: 12px;
+      max-height: 160px;
+      overflow-y: auto;
+      background: #1e293b;
+      border-radius: 4px;
+      padding: 12px;
+    }
+
+    .log-line { margin-bottom: 4px; }
+    .log-time { color: #64748b; }
+    .log-name { color: #38bdf8; font-weight: 600; }
+    .log-data { color: #a7f3d0; word-break: break-all; }
+
+    /* Code Snippets Section */
+    .docs-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+    }
+
+    .docs-section h2 {
+      font-size: 18px;
+      margin-bottom: 16px;
+    }
+
+    .code-block {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 16px;
+      border-radius: 6px;
+      font-family: Consolas, monospace;
+      font-size: 13px;
+      overflow-x: auto;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>OmniCombo</h1>
+      <p class="subtitle">High-performance (&lt; 5ms @ 5k rows), zero-dependency, virtualized multi-column combobox Web Component with Win32 keyboard navigation.</p>
+    </header>
+
+    <!-- Benchmark Alert -->
+    <div class="benchmark-card">
+      <div class="benchmark-text" id="benchmarkTimer">
+        <strong>Benchmark Status:</strong> Initializing 5,000-row benchmark...
+      </div>
+      <button class="btn" id="load5000Btn">Re-run 5,000 Rows Benchmark</button>
+    </div>
+
+    <!-- Live Demos Grid -->
+    <div class="demo-grid">
+      <!-- Demo 1: 5k rows virtualized -->
+      <div class="card">
+        <h2>⚡ 5,000 Rows Virtual Grid</h2>
+        <p>Full virtualized scrolling with in-memory multi-column search, column resizing, and sorting across 5,000 product records.</p>
+        <div class="combo-wrapper" id="benchmarkComboContainer"></div>
+      </div>
+
+      <!-- Demo 2: Win32 Autocomplete -->
+      <div class="card">
+        <h2>⌨️ Win32 Inline Auto-Complete</h2>
+        <p>Type letters (e.g. "u" or "j") to trigger native desktop-style inline suffix completion. Press <kbd>F4</kbd> or <kbd>Alt+Down</kbd> to toggle.</p>
+        <div class="combo-wrapper" id="autocompleteComboContainer"></div>
+      </div>
+
+      <!-- Demo 3: Multi-Select with Checkboxes -->
+      <div class="card">
+        <h2>☑️ Multi-Select with Checkboxes</h2>
+        <p>Multiple selection mode featuring row checkboxes, master select-all in header, and <kbd>Space</kbd> key toggling.</p>
+        <div class="combo-wrapper" id="multiSelectComboContainer"></div>
+      </div>
+
+      <!-- Demo 4: Remote Async API -->
+      <div class="card">
+        <h2>🌐 Remote Async API & Paging</h2>
+        <p>Simulates server-side debounced queries (250ms), server-side sorting, and virtual pagination with loading indicator.</p>
+        <div class="combo-wrapper" id="asyncComboContainer"></div>
+      </div>
+    </div>
+
+    <!-- Win32 Keyboard Guide -->
+    <div class="shortcuts-section">
+      <h2>🪟 Win32 Desktop Power-User Keyboard Shortcuts</h2>
+      <table class="shortcuts-table">
+        <thead>
+          <tr>
+            <th>Key / Shortcut</th>
+            <th>Action</th>
+            <th>Behavior</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><kbd>F4</kbd> or <kbd>Alt</kbd> + <kbd>↓</kbd></td>
+            <td>Toggle Dropdown</td>
+            <td>Opens or closes the dropdown grid table instantly.</td>
+          </tr>
+          <tr>
+            <td><kbd>Alt</kbd> + <kbd>↑</kbd></td>
+            <td>Close Dropdown</td>
+            <td>Closes the dropdown and commits the active selection.</td>
+          </tr>
+          <tr>
+            <td><kbd>↓</kbd> / <kbd>↑</kbd></td>
+            <td>Row Navigation</td>
+            <td>Moves active selection up or down by 1 row, scrolling the viewport smoothly.</td>
+          </tr>
+          <tr>
+            <td><kbd>PageDown</kbd> / <kbd>PageUp</kbd></td>
+            <td>Page Jump</td>
+            <td>Jumps selection down or up by the visible page size (10–12 rows).</td>
+          </tr>
+          <tr>
+            <td><kbd>Home</kbd> / <kbd>End</kbd></td>
+            <td>Extremes</td>
+            <td>Jumps directly to the very first or very last record in the dataset.</td>
+          </tr>
+          <tr>
+            <td><kbd>Enter</kbd></td>
+            <td>Commit</td>
+            <td>Selects the active row and closes the dropdown.</td>
+          </tr>
+          <tr>
+            <td><kbd>Esc</kbd></td>
+            <td>Revert / Cancel</td>
+            <td>Cancels active editing, restores previous committed value, and closes popup.</td>
+          </tr>
+          <tr>
+            <td><kbd>Tab</kbd></td>
+            <td>Commit & Advance</td>
+            <td>Commits active row and naturally moves focus to the next form control.</td>
+          </tr>
+          <tr>
+            <td><kbd>Space</kbd></td>
+            <td>Toggle Checkbox</td>
+            <td>In multi-select mode, toggles the checkbox on the currently highlighted row.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Live Event Logger -->
+    <div class="logger-section">
+      <div class="logger-header">
+        <h3>Live Event Stream</h3>
+        <button class="btn btn-secondary" id="clearLogBtn" style="padding: 4px 10px; font-size: 11px;">Clear Log</button>
+      </div>
+      <div class="log-box" id="eventLog">
+        <div class="log-line"><span class="log-time">[System]</span> <span class="log-name">Ready</span>: Interactive demos initialized.</div>
+      </div>
+    </div>
+
+    <!-- Framework Integration Guide -->
+    <div class="docs-section">
+      <h2>🚀 Multi-Framework Integration Guide</h2>
+
+      <h3 style="font-size: 14px; margin-bottom: 8px; color: #334155;">1. Vanilla JS / ASP.NET Web Forms (ASPX)</h3>
+      <div class="code-block">&lt;script src="dist/omnicombo.standalone.js"&gt;&lt;/script&gt;
+&lt;div id="myCombo"&gt;&lt;/div&gt;
+
+&lt;script&gt;
+  const combo = omniCombo('#myCombo', {
+    columns: [
+      { field: 'code', title: 'Code', width: 80 },
+      { field: 'name', title: 'Name', width: 200 }
+    ],
+    dataSource: myDataArray,
+    displayMember: 'name',
+    valueMember: 'code',
+    autocomplete: true
+  });
+
+  combo.addEventListener('change', (e) => {
+    console.log('Selected value:', e.detail.value);
+  });
+&lt;/script&gt;</div>
+
+      <h3 style="font-size: 14px; margin-bottom: 8px; color: #334155;">2. React</h3>
+      <div class="code-block">import 'omnicombo';
+import { useRef, useEffect } from 'react';
+
+export function ReactExample() {
+  const comboRef = useRef(null);
+
+  useEffect(() => {
+    const combo = comboRef.current;
+    combo.columns = [
+      { field: 'id', title: 'ID', width: 60 },
+      { field: 'name', title: 'Product Name', width: 200 }
+    ];
+    combo.dataSource = productsList;
+    combo.displayMember = 'name';
+    combo.valueMember = 'id';
+
+    const handleChange = (e) => console.log('Selection:', e.detail.value);
+    combo.addEventListener('change', handleChange);
+    return () => combo.removeEventListener('change', handleChange);
+  }, []);
+
+  return &lt;omni-combo ref={comboRef} autocomplete="true" sortable="true" /&gt;;
+}</div>
+
+      <h3 style="font-size: 14px; margin-bottom: 8px; color: #334155;">3. Angular</h3>
+      <div class="code-block">// In app.module.ts: schemas: [CUSTOM_ELEMENTS_SCHEMA]
+// In component:
+&lt;omni-combo 
+  #combo
+  [columns]="columns" 
+  [dataSource]="items" 
+  display-member="name" 
+  value-member="id"
+  (change)="onSelectionChange($event)"&gt;
+&lt;/omni-combo&gt;</div>
+    </div>
+  </div>
+
+  <script type="module" src="./demo.ts"></script>
+</body>
+</html>
+

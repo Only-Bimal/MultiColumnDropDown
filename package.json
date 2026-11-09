@@ -1,0 +1,44 @@
+{
+  "name": "omnicombo",
+  "version": "2.0.0",
+  "description": "High-performance, zero-dependency, virtualized multi-column combobox Web Component with keyboard navigation.",
+  "type": "module",
+  "main": "./dist/omnicombo.commonjs.js",
+  "module": "./dist/omnicombo.module.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/omnicombo.module.js",
+      "require": "./dist/omnicombo.commonjs.js",
+      "default": "./dist/omnicombo.standalone.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && tsc -p tsconfig.build.json",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "combobox",
+    "multi-column",
+    "dropdown",
+    "virtual-scroll",
+    "grid",
+    "web-component",
+    "custom-elements",
+    "vanilla-js",
+    "react",
+    "angular",
+    "aspx"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.7.3",
+    "vite": "^6.1.0"
+  }
+}

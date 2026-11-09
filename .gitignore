@@ -1,0 +1,20 @@
+## Visual Studio / Build Artifacts
+.vs/
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Node.js / Modern Web Build Artifacts
+node_modules/
+dist/
+*.tsbuildinfo
+
+## Visual Studio Code
+.vscode/
+
+## Temporary / Logs
+*.log
+*.tmp
